@@ -1,10 +1,44 @@
 <!DOCTYPE html>
+{% load staticfiles %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Script Manager - {% block title %}Welcome{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'CSS/main.css' %}">
+    <link rel="stylesheet" href="{% static 'DataTables/datatables.min.css' %}"/>
 </head>
+
 <body>
+
+    <header>
+        <div id="navigation">
+            <a href="{% url 'home' %}" class="left-link">Home</a>
+            {% if not user.is_authenticated %}
+                <a href="{% url 'login' %}" class="right-link">Login</a>
+                <span class="separator">|</span>
+                <a href="{% url 'register' %}" class="right-link">Register</a>
+            {% else %}
+                <a href="{% url 'logout' %}" class="right-link">Logout</a>
+                <span class="separator">|</span>
+                <span class="welcome-user">Welcome <span class="username">{{ user.username }}</span>!</span>
+            {% endif %}
+        </div>
+    </header>
+
+    <div id="content">
+        {% block content %}
+
+        {% endblock %}
+    </div>
+
+    <footer>
+        <p>&copy; Copy right by Aban-PPC</p>
+    </footer>
 
 </body>
 </html>
+
+<script type="text/javascript" src="{% static 'JS/jquery-3.2.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'JS/main.js' %}"></script>
+<script type="text/javascript" src="{% static 'DataTables/datatables.min.js'%}"></script>
