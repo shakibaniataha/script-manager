@@ -86,3 +86,7 @@ body{
 table.dataTable tbody td{
     text-align: center;
 }
+
+.orange-text{
+    color: orange;
+}

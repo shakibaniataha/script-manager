@@ -1,2 +1,22 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+
+{% block content %}
+    {% if not user.is_authenticated %}
+        <h1 class="centralized-text">Welcome!</h1>
+        <h2 class="orange-text centralized-text">In order to see the APIs and add requests to them, please log in!</h2>
+
+    {% else %}
+        <h1>Add a new Request:</h1>
+        <form action="#" method="post">
+            {% csrf_token %}
+            <label for="api-select">Please select your desired API: </label>
+            <select id="api-select">
+                {% for api in apis %}
+                    <option value="{{ api.id }}">{{ api.name }}</option>
+                {% endfor %}
+            </select>
+            <button>Submit</button>
+        </form>
+    {% endif %}
+{% endblock %}
