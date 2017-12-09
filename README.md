@@ -1,3 +1,15 @@
+# Project ScriptManager
+[project description ...]
+### Project flow
+...
+
+Each new user is assigned to the group 'guest' by default after registration. Later the admin decides which group to add the new user in. 
+
+Any logged-in individual can only see the APIs that his group has access to, plus the APIs which are assigned to the 'guest' group
+
+...
+
+
 ### Important Note: celery as daemon
 Make sure you have celery service running on your server. 
 in order to do this, follow this instruction:

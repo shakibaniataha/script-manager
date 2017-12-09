@@ -26,7 +26,7 @@ class Request(models.Model):
 
     api_id = models.ForeignKey(API)
     input_params = models.CharField(max_length=200, blank=True)
-    owner = models.ForeignKey(User)
+    owner = models.ForeignKey(User, null=True)
     status = models.CharField(max_length=20, choices=REQUEST_STATUS)
     date_added = models.DateTimeField(auto_now_add=True)
 
