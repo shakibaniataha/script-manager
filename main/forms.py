@@ -17,4 +17,4 @@ class RegisterForm(UserCreationForm):
 class AddRequestForm(forms.ModelForm):
     class Meta:
         model = Request
-        fields = ('input_params')
+        fields = ('input_params',)

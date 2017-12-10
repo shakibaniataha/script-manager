@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}My Requests{% endblock %}
+
+{% block content %}
+    <table id="requests" class="display" hidden>
+        <thead>
+            <tr>
+                <th>Request ID</th>
+                <th>API Name</th>
+                <th>Input Parameters</th>
+                <th>Date Added</th>
+                <th>Status</th>
+                <th>Logs</th>
+                <th>Download Results</th>
+            </tr>
+        </thead>
+    </table>
+{% endblock %}

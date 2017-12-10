@@ -4,7 +4,9 @@ from __future__ import unicode_literals
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from .forms import RegisterForm, AddRequestForm
-from .models import API
+from .models import API, Request
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 
 
 def home(request):
@@ -18,10 +20,20 @@ def home(request):
 
     if request.method == 'POST':
         form = AddRequestForm(request.POST)
+        if form.is_valid():
+            req = form.save(commit=False)
+            req.api_id = API.objects.get(pk=request.POST.get('api-select'))
+            req.owner = request.user
+            req.status = 'processing'
+            req.save()
+            # Now you must call celery worker to run the request script
 
-        # To be continued...
+            return redirect('requests')
 
-    return render(request, 'main/home.html', {'apis': user_apis})
+    else:
+        form = AddRequestForm()
+
+    return render(request, 'main/home.html', {'apis': user_apis, 'form': form})
 
 
 def register(request):
@@ -39,3 +51,24 @@ def register(request):
     else:
         form = RegisterForm()
     return render(request, 'main/register.html', {'form': form})
+
+
+@login_required
+def requests(request):
+    return render(request, 'main/requests.html')
+
+
+def ajaxGetRequests(request):
+    response = []
+    if request.user.id:
+        reqs = Request.objects.filter(owner=request.user)
+        for req in reqs:
+            response.append({
+                'request_id': req.id,
+                'api_name': req.api_id.name,
+                'input_params': req.input_params,
+                'date_added': req.date_added,
+                'status': dict(Request.REQUEST_STATUS)[req.status]
+            })
+
+    return JsonResponse(response, safe=False)

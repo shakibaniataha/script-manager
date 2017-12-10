@@ -19,6 +19,7 @@
                 <span class="separator">|</span>
                 <a href="{% url 'register' %}" class="right-link">Register</a>
             {% else %}
+                <a href="{% url 'requests' %}" class="left-link">My Requests</a>
                 <a href="{% url 'logout' %}" class="right-link">Logout</a>
                 <span class="separator">|</span>
                 <span class="welcome-user">Welcome <span class="username">{{ user.username }}</span>!</span>
