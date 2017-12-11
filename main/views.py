@@ -7,6 +7,7 @@ from .forms import RegisterForm, AddRequestForm
 from .models import API, Request
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from .tasks import run_command
 
 
 def home(request):
@@ -26,7 +27,9 @@ def home(request):
             req.owner = request.user
             req.status = 'processing'
             req.save()
-            # Now you must call celery worker to run the request script
+
+            # command = req.api_id.command
+            run_command.delay('sdlfkjsdlkfj')
 
             return redirect('requests')
 

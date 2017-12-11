@@ -64,3 +64,20 @@ Now you can do:
 ```bash
 $ sudo supervisorctl [status | start | stop | restart] ScriptManager 
 ```
+## !!! Very important note !!!:
+Make sure you have only ONE celery daemon running on your server or your tasks will be spread amongst the running daemons and you will lose some of them!!!
+In order to see how many daemons are running, run ```$ sudo supervisorctl status```. You should see only one daemon with the status RUNNING.
+## Monitoring celery queues
+Using "Flower" package you can easily monitor your celery queues and do other useful things. 
+In order to install and use flower, follow this procedure:
+
+```bash
+$ pip install flower
+```
+
+Now launch it:
+```bash
+$ flower -A ScriptManager --port=5555
+```
+
+Now open "localhost:5555" and enjoy :D
