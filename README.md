@@ -81,3 +81,25 @@ $ flower -A ScriptManager --port=5555
 ```
 
 Now open "localhost:5555" and enjoy :D
+
+## Automatically restarting celery after each change
+When you change your files, especially tasks.py, you must restart celery (or the daemon) for the changes to take effect. In order to do that you can use "watchdog". For that, do the following:
+
+```bash
+$ sudo apt install libyaml-dev
+$ pip install watchdog
+```
+Now we must change the 'command' line of our script_manager daemon (script_manager.conf) to this:
+
+```bash
+command=/home/aban/.virtualenvs/script-manager/bin/watchmedo auto-restart -p '*.py' -d main/ -- /home/aban/.virtualenvs/script-manager/bin/celery --app=ScriptManager.celery:app worker --loglevel=INFO
+```
+This basically tells watchdog that if any changes happen to any '*.py' file in the 'main' folder (which includes tasks.py) of our ScriptManager project, it must restart celery.
+
+Now again we must reread and update supervisorctl:
+
+```bash
+$ sudo supervisorctl reread
+$ sudo supervisorctl update
+```
+And now you are good to go!
