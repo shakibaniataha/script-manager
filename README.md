@@ -7,6 +7,8 @@ Each new user is considered 'guest' by default after registration. Later the adm
 
 Any logged-in individual can only see the APIs that his group has access to, plus the APIs which are assigned to the 'guest' group
 
+By default all your scripts should be in the 'bash_scripts' directory. If you want to change it, just make sure you change the SCRIPTS_DIR variable in the settings.py accordingly.
+
 ...
 
 
