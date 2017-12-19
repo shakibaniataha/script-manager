@@ -105,3 +105,9 @@ $ sudo supervisorctl reread
 $ sudo supervisorctl update
 ```
 And now you are good to go!
+
+
+## Another important note
+Be sure that you give enough permissions to the folders that the application needs to read from and write to them.
+For example the app must be able to create directories to store the output files of the requests it executes.
+For starters, the default folders 'bash_scripts' and 'output_files' need to be considered.   

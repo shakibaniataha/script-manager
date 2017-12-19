@@ -139,3 +139,4 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
 SCRIPTS_DIR = './bash_scripts/'
+WORKING_DIR = './output_files/'

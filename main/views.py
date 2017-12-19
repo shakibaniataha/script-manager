@@ -32,7 +32,6 @@ def home(request):
                 'id': req.id,
                 'command': req.api_id.command,
                 'input_params': req.input_params,
-                'output_files': req.api_id.output_files
             }
             run_command.delay(jsonified_request)
 

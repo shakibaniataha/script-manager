@@ -4,6 +4,7 @@ $.ajax({
         var requests = $('#requests');
         requests.show();
         requests.DataTable({
+            "order": [[ 0, "desc" ]],
             "aaData": result,
             "aoColumns": [
                 { "mDataProp": "request_id" },
