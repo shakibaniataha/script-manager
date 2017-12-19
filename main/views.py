@@ -28,13 +28,13 @@ def home(request):
             req.status = 'processing'
             req.save()
 
-            serialized_request = {
+            jsonified_request = {
                 'id': req.id,
                 'command': req.api_id.command,
                 'input_params': req.input_params,
                 'output_files': req.api_id.output_files
             }
-            run_command.delay(serialized_request)
+            run_command.delay(jsonified_request)
 
             return redirect('requests')
 
