@@ -11,6 +11,8 @@ from .tasks import run_command
 import os
 from django.conf import settings
 from django.http import HttpResponse, Http404
+import zipfile
+import StringIO
 
 
 def home(request):
@@ -87,15 +89,36 @@ def ajaxGetRequests(request):
 def download_results(request):
     request_id = request.GET.get('request_id')
     req = Request.objects.get(pk=request_id)
-    file_path = os.path.realpath(settings.WORKING_DIR + str(request_id) + '/' + req.api_id.output_files)
-    return download_single(file_path)
+
+    return download_zip(req)
 
 
-def download_single(file_path):
-    if os.path.exists(file_path):
-        with open(file_path) as fh:
-            response = HttpResponse(fh.read(), content_type='application/text')
-            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
-            return response
+def download_zip(req):
+    file_names = req.api_id.output_files.replace(' ', '').split(',')
 
-    raise Http404
+    zip_subdir = "results"
+    zip_filename = "%s.zip" % zip_subdir
+
+    # Open StringIO to grab in-memory ZIP contents
+    s = StringIO.StringIO()
+
+    # The zip compressor
+    zf = zipfile.ZipFile(s, "w")
+
+    for path in file_names:
+        # Calculate path for file in zip
+        file_path = os.path.realpath(settings.WORKING_DIR + str(req.id) + '/' + path)
+        # zip_path = os.path.join(file_path, zip_subdir)
+
+        # Add file, at correct path
+        zf.write(file_path, path)
+
+    # Must close zip for all contents to be written
+    zf.close()
+
+    # Grab ZIP file from in-memory, make response with correct MIME-type
+    resp = HttpResponse(s.getvalue(), content_type = "application/x-zip-compressed")
+    # ..and correct content-disposition
+    resp['Content-Disposition'] = 'attachment; filename=%s' % zip_filename
+
+    return resp
