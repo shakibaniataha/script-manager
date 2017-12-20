@@ -8,6 +8,9 @@ from .models import API, Request
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from .tasks import run_command
+import os
+from django.conf import settings
+from django.http import HttpResponse, Http404
 
 
 def home(request):
@@ -79,3 +82,20 @@ def ajaxGetRequests(request):
             })
 
     return JsonResponse(response, safe=False)
+
+
+def download_results(request):
+    request_id = request.GET.get('request_id')
+    req = Request.objects.get(pk=request_id)
+    file_path = os.path.realpath(settings.WORKING_DIR + str(request_id) + '/' + req.api_id.output_files)
+    return download_single(file_path)
+
+
+def download_single(file_path):
+    if os.path.exists(file_path):
+        with open(file_path) as fh:
+            response = HttpResponse(fh.read(), content_type='application/text')
+            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+            return response
+
+    raise Http404

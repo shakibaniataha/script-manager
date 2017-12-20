@@ -13,31 +13,20 @@ $.ajax({
                 { "mDataProp": "date_added" },
                 { "mDataProp": "status" },
                 { "mDataProp": null },
-                { "mDataProp": null }
-                // {
-                //     render: function (a, b, row_data) {
-                //         return row_data['status'] === 'scheduled' ?
-                //             '<input type="button" id="'+row_data['id']+'" value="Run" class="script-run-btn"/>'
-                //             : '';
-                //     }
-                // }
-
+                {
+                    render: function (a, b, row_data) {
+                        return row_data['status'] === 'Finished' ?
+                            '<input type="button" id="'+row_data['request_id']+'" value="Download Results" class="script-download"/>'
+                            : '';
+                    }
+                }
             ],
             destroy: true
         });
     }
+})
+.done(function(){
+    $('.script-download').on('click', function(){
+        window.location.href = '/downloadResults/?request_id=' + this.id;
+    });
 });
-// .done(function(){
-//     $('.script-run-btn').on('click', function(){
-//         $.ajax({
-//             url: '/runRequest/',
-//             data: {
-//                 'request_id': this.id
-//             },
-//             dataType: 'json',
-//             success: function (result) {
-//                 alert(JSON.stringify(result))
-//             }
-//         });
-//     });
-// });
