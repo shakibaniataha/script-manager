@@ -4,6 +4,7 @@ from ScriptManager import settings
 from subprocess import PIPE, Popen
 import os, errno
 from shutil import copyfile
+from .models import Request
 
 
 @shared_task
@@ -38,6 +39,11 @@ def run_command(jsonified_request):
 
     if os.path.isfile(command):
         os.remove(command)
+
+    # Updating request status from processing to finished
+    request = Request.objects.get(pk=request_id)
+    request.status = 'finished'
+    request.save()
 
 
 def mkdir_p(path):
