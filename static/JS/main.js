@@ -1,9 +1,11 @@
+var requests = $('#requests');
+
 $.ajax({
     url: '/ajax/getRequests/',
     success: function (result) {
-        var requests = $('#requests');
+
         requests.show();
-        requests.DataTable({
+        requests = requests.DataTable({
             "order": [[ 0, "desc" ]],
             "aaData": result,
             "aoColumns": [
@@ -12,11 +14,17 @@ $.ajax({
                 { "mDataProp": "input_params" },
                 { "mDataProp": "date_added" },
                 { "mDataProp": "status" },
-                { "mDataProp": null },
                 {
                     render: function (a, b, row_data) {
                         return row_data['status'] === 'Finished' ?
-                            '<input type="button" id="'+row_data['request_id']+'" value="Download Results" class="script-download"/>'
+                            '<input type="button" value="std.out" class="stdout"/>  <input type="button" value="std.err" class="stderr"/>'
+                            : '';
+                    }
+                },
+                {
+                    render: function (a, b, row_data) {
+                        return row_data['status'] === 'Finished' ?
+                            '<input type="button" value="Download Results" class="outputs"/>'
                             : '';
                     }
                 }
@@ -26,7 +34,26 @@ $.ajax({
     }
 })
 .done(function(){
-    $('.script-download').on('click', function(){
-        window.location.href = '/downloadResults/?request_id=' + this.id;
+    $("input[type='button']").on('click', function(){
+        callDownloadUrl($(this))
     });
 });
+
+function callDownloadUrl(btn) {
+    var row_data = requests.row( btn.parents('tr') ).data();
+    var id = row_data['request_id'];
+    switch (btn.attr('class')){
+        case 'outputs':
+            window.location.href = '/downloadResults/?request_id=' + id;
+            break;
+
+        case 'stdout':
+            window.location.href = '/downloadLogs/?request_id=' + id + '&file=stdout';
+            break;
+
+        case 'stderr':
+            window.location.href = '/downloadLogs/?request_id=' + id + '&file=stderr';
+            break;
+    }
+
+}

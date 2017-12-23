@@ -93,6 +93,23 @@ def download_results(request):
     return download_zip(req)
 
 
+def download_logs(request):
+    name_to_file_dict = {
+        'stdout': 'std.out',
+        'stderr': 'std.err'
+    }
+    request_id = request.GET.get('request_id')
+    std_type = request.GET.get('file')
+    file_path = os.path.realpath(settings.WORKING_DIR + str(request_id) + '/' + name_to_file_dict[std_type])
+    if os.path.exists(file_path):
+        with open(file_path) as fh:
+            response = HttpResponse(fh.read(), content_type='application/text')
+            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+            return response
+
+    raise Http404
+
+
 def download_zip(req):
     file_names = req.api_id.output_files.replace(' ', '').split(',')
 
