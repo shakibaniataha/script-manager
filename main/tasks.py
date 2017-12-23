@@ -27,7 +27,8 @@ def run_command(jsonified_request):
 
     command_list = []
     command_list.append(command)
-    command_list += input_params.strip(' ').split(',')
+    params_list = input_params.replace(' ', '').split(',')
+    command_list += params_list
     stdout, stderr = Popen(command_list, stdout=PIPE, stderr=PIPE, cwd=cwd).communicate()
 
     out_file = open(cwd + 'std.out', 'w')
