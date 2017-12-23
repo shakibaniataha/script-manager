@@ -10,12 +10,6 @@
         <h1>Add a new Request:</h1>
         <form method="post">
             {% csrf_token %}
-            <label for="api-select">Please select your desired API: </label>
-            <select id="api-select" name="api-select">
-                {% for api in apis %}
-                    <option value="{{ api.id }}">{{ api.name }}</option>
-                {% endfor %}
-            </select>
 
             {{ form.as_p }}
 

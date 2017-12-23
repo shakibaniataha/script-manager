@@ -28,7 +28,6 @@ def home(request):
         form = AddRequestForm(request.POST)
         if form.is_valid():
             req = form.save(commit=False)
-            req.api_id = API.objects.get(pk=request.POST.get('api-select'))
             req.owner = request.user
             req.status = 'processing'
             req.save()
