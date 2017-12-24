@@ -22,7 +22,7 @@ def home(request):
     for api in all_apis:
         authorized_groups = str(api.authorized_groups).replace(' ', '').split(',')
         if len(set(user_groups).intersection(set(authorized_groups))) > 0:
-            user_apis.append(api)
+            user_apis.append(api.id)
 
     if request.method == 'POST':
         form = AddRequestForm(request.POST)
@@ -43,8 +43,9 @@ def home(request):
 
     else:
         form = AddRequestForm()
+        form.fields["api_id"].queryset = API.objects.filter(pk__in=user_apis)
 
-    return render(request, 'main/home.html', {'apis': user_apis, 'form': form})
+    return render(request, 'main/home.html', {'form': form})
 
 
 def register(request):

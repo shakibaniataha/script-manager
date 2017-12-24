@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sleep 20
+sleep 10
 expr ${1} / ${2}
 touch gholi
 touch boz
