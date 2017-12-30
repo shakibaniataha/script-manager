@@ -11,7 +11,8 @@ from .models import Request
 def run_command(jsonified_request):
     request_id = jsonified_request['id']
     command = jsonified_request['command']
-    input_params = jsonified_request['input_params']
+    num_required_input_params = jsonified_request['num_required_input_params']
+    input_params = jsonified_request['input_params'].replace(' ', '')
 
     req_working_dir = settings.WORKING_DIR + str(request_id) + '/'
     mkdir_p(req_working_dir)
@@ -30,10 +31,11 @@ def run_command(jsonified_request):
         command_list.append('./' + command)
 
     else:
-        command_list.append(command)
+        command_list = command.split(' ')
 
-    params_list = input_params.replace(' ', '').split(',')
-    command_list += params_list
+    if input_params != '' and num_required_input_params > 0:
+        params_list = input_params.split(',')
+        command_list += params_list
     stdout, stderr = Popen(command_list, stdout=PIPE, stderr=PIPE, cwd=cwd).communicate()
 
     out_file = open(cwd + 'std.out', 'w')
