@@ -44,7 +44,8 @@ def home(request):
 
     else:
         form = AddRequestForm()
-        form.fields["api_id"].queryset = API.objects.filter(pk__in=user_apis)
+
+    form.fields["api_id"].queryset = API.objects.filter(pk__in=user_apis)
 
     return render(request, 'main/home.html', {'form': form})
 
@@ -140,3 +141,15 @@ def download_zip(req):
     resp['Content-Disposition'] = 'attachment; filename=%s' % zip_filename
 
     return resp
+
+
+def ajaxGetAPIDescription(request):
+    response = {
+        'description': ''
+    }
+    api_id = request.GET.get('api_id')
+    if api_id:
+        api = API.objects.get(pk=api_id)
+        response['description'] = api.description
+
+    return JsonResponse(response, safe=False)

@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^register/$', views.register, name='register'),
     url(r'^requests/$', views.requests, name='requests'),
     url(r'^ajax/getRequests/$', views.ajaxGetRequests, name='get_requests'),
+    url(r'^ajax/getApiDescription/$', views.ajaxGetAPIDescription, name='get_api_description'),
     url(r'^downloadResults/$', views.download_results, name='download_results'),
     url(r'^downloadLogs/$', views.download_logs, name='download_logs'),
 ]

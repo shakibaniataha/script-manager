@@ -57,3 +57,27 @@ function callDownloadUrl(btn) {
     }
 
 }
+
+
+$('#id_api_id').on('change', function () {
+    getApiDescription($(this).val());
+});
+
+
+function getApiDescription(api_id){
+    $.ajax({
+        url: '/ajax/getApiDescription/',
+        type: "GET",
+        data: {'api_id': api_id},
+        contentType: 'application/json',
+        success: function(result){
+            description = result['description'];
+            $('#description-text').html(description);
+        }
+    });
+}
+
+
+$(document).ready(function () {
+    getApiDescription($('#id_api_id').val())
+});

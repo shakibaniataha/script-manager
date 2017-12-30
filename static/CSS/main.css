@@ -94,3 +94,18 @@ table.dataTable tbody td{
 .errorlist{
     color: red;
 }
+
+#api-description{
+    margin-top: 40px;
+}
+
+#description-title{
+    font-weight:bold;
+    color: orangered;
+}
+
+#description-text{
+    padding: 0 40px 0 40px;
+    color: dodgerblue;
+    margin-top: 10px;
+}

@@ -35,5 +35,4 @@ class AddRequestForm(forms.ModelForm):
 
         num_required_input_params = self.cleaned_data.get('api_id').num_input_params
         if num_valid_params != num_required_input_params:
-            raise ValidationError('The number of input params must match the number of required params'
-                                  ' specified by the API')
+            raise ValidationError('This API takes ' + str(num_required_input_params) + ' parameters as input')

@@ -14,6 +14,13 @@
             {{ form.as_p }}
 
             <button>Submit</button>
+
+            <div id="api-description">
+                <span id="description-title">API Description:</span>
+                <p id="description-text">
+                    <!-- This paragraph will be filled by ajax -->
+                </p>
+            </div>
         </form>
     {% endif %}
 {% endblock %}
