@@ -13,6 +13,7 @@ from django.conf import settings
 from django.http import HttpResponse, Http404
 import zipfile
 import StringIO
+import pytz
 
 
 def home(request):
@@ -81,7 +82,7 @@ def ajaxGetRequests(request):
                 'request_id': req.id,
                 'api_name': req.api_id.name,
                 'input_params': req.input_params,
-                'date_added': req.date_added,
+                'date_added': aslocaltimestr(req.date_added),
                 'status': dict(Request.REQUEST_STATUS)[req.status]
             })
 
@@ -153,3 +154,14 @@ def ajaxGetAPIDescription(request):
         response['description'] = api.description
 
     return JsonResponse(response, safe=False)
+
+
+# The following two functions are used for converting default django datetime to local datetime
+def utc_to_local(utc_dt):
+    local_tz = pytz.timezone(settings.LOCAL_TIME_ZONE)
+    local_dt = utc_dt.replace(tzinfo=pytz.utc).astimezone(local_tz)
+    return local_tz.normalize(local_dt)
+
+
+def aslocaltimestr(utc_dt):
+    return utc_to_local(utc_dt).strftime('%Y-%m-%d %H:%M:%S')
