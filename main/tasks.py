@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 from celery import shared_task
-from ScriptManager import settings
+from django.conf import settings
 from subprocess import PIPE, Popen
 import os, errno
 from shutil import copyfile
