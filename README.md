@@ -1,4 +1,4 @@
-# Project ScriptManager
+# Project Script Manager
 [project description ...]
 ### Project flow
 ...
