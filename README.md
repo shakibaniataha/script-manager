@@ -1,15 +1,37 @@
 # Project ScriptManager
-[project description ...]
+This application aims at automating and managing bash-script execution. The main point of it is to enable users to run tasks (bash scripts) that are
+pertinent to their group and wait for the process to finish and download the results later. 
 ### Project flow
-...
+There are two main models or notions in this project that need to be explained. The first one is the API model. In this application,
+an API is basically an interface to run commands. A command might be a simple shell command like "ls -l" or a reference to an already-made script file.
+An API might take some inputs and generate outputs in three different categories: stdout, stderr, and files.
+Each API has an "output files" field which describes the name of the files that the bash script creates (not including stdout and stderr).
 
-Each new user is considered 'guest' by default after registration. Later the admin decides which group to add the new user to. 
+Each API is only accessible for specific groups of users. But if you add the "guest" group to the authorized groups, then any user can access the API.
+
+The second model is called "Request". A Request is basically a call to an API to run its command with some specific inputs (if any) and provide the results for download. 
+The project uses the "celery" module to schedule tasks. When a request is done executing, its results will be available for download. 
+These results include the stdout and stderr of the script, plus the output files related to that command.   
+
+If we want to explain the main aspects, we can follow these steps to understand the basic flow of the application:
+
+1- Just like any typical django project, there is a backend panel that an admin logs in, defines an API, assigns some authorized groups to that API and fills other complimentary fields. 
+
+2- Users register in the application.
+
+3- The admin defines groups and assigns users to them in order to give them permission to execute different APIs.
+
+4- Now each user can browse the APIs that they are allowed to see and can execute them and download the results later.
+There is a page called "My Requests" for users in order to manage their Requests.  
+
+<b>Note: </b>Each new user is considered 'guest' by default after registration. Later the admin decides which group to add the new user to. 
 
 Any logged-in individual can only see the APIs that his group has access to, plus the APIs which are assigned to the 'guest' group
 
-By default all your scripts should be in the 'bash_scripts' directory. If you want to change it, just make sure you change the SCRIPTS_DIR variable in the settings.py accordingly.
+<b>Note: </b>By default all the scripts that the APIs refer to should be in the 'bash_scripts' directory. If you want to change it, just make sure you change the SCRIPTS_DIR variable in the settings.py accordingly.
 
-...
+### Sample Data
+There is a file named "populate_db.py" which you can execute to create sample data to work with the application. 
 
 
 ### Postgresql database setup
@@ -209,4 +231,5 @@ And now you are good to go!
 ## Another important note
 Be sure that you give enough permissions to the folders that the application needs to read from and write to them.
 For example the app must be able to create directories to store the output files of the requests it executes.
-For starters, the default folders 'bash_scripts' and 'output_files' need to be considered.   
+For starters, the default folders 'bash_scripts' and 'output_files' need to be considered. A 755 permission will be desirable.   
+Also remember That the celery logs are saved in the "celery_logs" folder
