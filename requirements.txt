@@ -5,7 +5,7 @@ Babel==2.5.1
 backports-abc==0.5
 billiard==3.3.0.23
 celery==3.1.18
-certifi==2017.11.5
+certifi==2023.7.22
 decorators==0.1.1
 Django==1.11.7
 flower==0.9.2
